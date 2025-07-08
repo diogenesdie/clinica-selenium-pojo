@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +18,8 @@ public class SeleniumTest {
 
     @BeforeEach
     public void setup() {
-        WebDriverManager.chromedriver().setup();
+        WebDriverManager.chromedriver().clearResolutionCache(); 
+        WebDriverManager.chromedriver().setup(); 
         driver = new ChromeDriver();
     }
 
@@ -27,8 +31,9 @@ public class SeleniumTest {
         driver.findElement(By.name("cpf")).sendKeys("12345678900");
         driver.findElement(By.name("dataHora")).sendKeys("2025-07-10 09:00");
         driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        WebElement mensagem = driver.findElement(By.id("mensagem"));
+        
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement mensagem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("mensagem")));
         assertTrue(mensagem.getText().contains("Maria da Silva"));
         assertTrue(mensagem.getText().contains("12345678900"));
     }
