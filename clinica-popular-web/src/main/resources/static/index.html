@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendamento de Consulta</title>
+</head>
+<body>
+    <h1>Clínica Popular - Agendamento</h1>
+    <form id="formConsulta">
+        <label>Nome:</label><br>
+        <input type="text" name="nome" required><br><br>
+
+        <label>CPF:</label><br>
+        <input type="text" name="cpf" required><br><br>
+
+        <label>Data e Hora da Consulta:</label><br>
+        <input type="text" name="dataHora" placeholder="2025-07-10 09:00" required><br><br>
+
+        <button type="submit">Agendar Consulta</button>
+    </form>
+
+    <p id="mensagem" style="margin-top: 20px; font-weight: bold;"></p>
+
+    <script>
+        document.getElementById("formConsulta").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const data = new URLSearchParams(new FormData(form));
+
+            const response = await fetch("/consultas", {
+                method: "POST",
+                body: data
+            });
+
+            const text = await response.text();
+            document.getElementById("mensagem").innerText = text;
+        });
+    </script>
+</body>
+</html>
